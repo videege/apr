@@ -1,0 +1,14 @@
+<mat-toolbar color="primary">
+  <mat-icon>shuffle</mat-icon>
+  <span>Ada's Pokémon Roulette</span>
+</mat-toolbar>
+
+<button mat-raised-button color="primary" (click)="getRandomPokemon()">Get Random Pokemon</button>
+
+<div *ngIf="pkm" class="carousel">
+  <p>{{ pkm.name }}</p>
+  <img [src]="pkm.imageData" />
+</div>
+
+
+<router-outlet></router-outlet>

@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ada-pokemon-roulette": {
+      "hosting": {
+        "apr": [
+          "ada-pokemon-roulette"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ada-pokemon-roulette"
+  }
+}
