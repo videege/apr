@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Pokemon, PokemonService } from './pokemon.service';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -9,12 +10,20 @@ import { Pokemon, PokemonService } from './pokemon.service';
 export class AppComponent implements OnInit {
   title = 'apr';
 
-  constructor(private pokemonService: PokemonService) {
+  public typeFilters: { [name: string]: FormControl } = {};
+
+  types: string[] = [];
+  constructor(public pokemonService: PokemonService) {
 
   }
 
   ngOnInit(): void {
-    this.pokemonService.getRandomPokemon();
+    this.pokemonService.getRandomPokemon().then(() => {
+      this.types = this.pokemonService.getPokemonTypes();
+      for (const type of this.types) {
+        this.typeFilters[type] = new FormControl(false);
+      }
+    });
   }
 
   public pkm: Pokemon | null = null;
@@ -22,8 +31,14 @@ export class AppComponent implements OnInit {
   private timer = (ms: number) => new Promise(res => setTimeout(res, ms))
 
   async getRandomPokemon() {
+    let selectedTypes: string[] = [];
+    for (const type of this.types) {
+      if (!!this.typeFilters[type].value) {
+        selectedTypes.push(type);
+      }
+    }
     for (var i = 0; i < 25; i++) {
-      this.pkm = await this.pokemonService.getRandomPokemon();
+      this.pkm = await this.pokemonService.getRandomPokemon(selectedTypes);
       await this.timer(100);
     }
   }

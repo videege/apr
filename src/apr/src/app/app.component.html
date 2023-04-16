@@ -3,12 +3,43 @@
   <span>Ada's Pokémon Roulette</span>
 </mat-toolbar>
 
-<button mat-raised-button color="primary" (click)="getRandomPokemon()">Get Random Pokemon</button>
+<div class="content-wrapper">
+  <div *ngIf="pokemonService.loadProgress !== 100">
+    <p>
+      Caching Pokémon data ({{
+        pokemonService.loadProgress | number: '1.0-0'
+      }}%) ...
+    </p>
+    <mat-progress-bar
+      class="example-margin"
+      color="primary"
+      mode="determinate"
+      [value]="pokemonService.loadProgress"
+    ></mat-progress-bar>
+  </div>
 
-<div *ngIf="pkm" class="carousel">
-  <p>{{ pkm.name }}</p>
-  <img [src]="pkm.imageData" />
+  <div *ngIf="pokemonService.loadProgress === 100">
+    <div class="content">
+      <div class="random-picker">
+        <button mat-raised-button color="primary" (click)="getRandomPokemon()">
+          Get Random Pokemon
+        </button>
+       
+        <img *ngIf="pkm" [src]="pkm.imageData" class="pokemon-pic" />
+        <p *ngIf="pkm" class="pokemon-name">{{ pkm.name | titlecase }}</p>
+      </div>
+      <div>
+        <h2>Type Filters</h2>
+        <form class="checkbox-container">
+          <mat-checkbox
+            *ngFor="let control of typeFilters | keyvalue"
+            [formControl]="control.value">
+            {{ control.key | titlecase }}
+          </mat-checkbox>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <router-outlet></router-outlet>
 </div>
-
-
-<router-outlet></router-outlet>

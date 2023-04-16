@@ -19,14 +19,16 @@ export class PokemonService {
 
   pokemon: Pokemon[] = [];
 
+  public loadProgress = 0;
 
   private names: string[] = [];
 
   async loadPokemonData() {
-    if (!this.pokemon.length) {
+    if (!this.pokemon.length && this.loadProgress === 0) {
       let ls = localStorage.getItem('pokemon');
       if (ls) {
         this.pokemon = JSON.parse(ls);
+        this.loadProgress = 100;
         return;
       }
 
@@ -39,6 +41,7 @@ export class PokemonService {
   }
 
   async loadPokemon() {
+    let pokeCount = this.names.length;
     for await (const name of this.names) {
       await this.api.getPokemonByName(name)
         .then((response) => {          
@@ -48,6 +51,7 @@ export class PokemonService {
             imageData: null,
             types: response.types.map(x => x.type.name)
           });
+          this.loadProgress += (1.0 / pokeCount) * 100 / 2;
         }, (error) => {
           console.log(error);
         });
@@ -74,19 +78,39 @@ export class PokemonService {
   }
 
   async loadPokemonImages() {
+    let pokeCount = this.names.length;
     for await (const pokemon of this.pokemon) {
       await this.getBase64ImageFromUrl(<string>pokemon.picture)
         .then((response) => {          
           pokemon.imageData = <any>response;
+          this.loadProgress += (1.0 / pokeCount) * 100 / 2;
         }, (error) => {
           console.log(error);
         });
     }
+    this.loadProgress = 100;
     localStorage.setItem('pokemon', JSON.stringify(this.pokemon));
   }
 
-  async getRandomPokemon(): Promise<Pokemon> {
+  async getRandomPokemon(types: string[] = []): Promise<Pokemon> {
     await this.loadPokemonData();
-    return this.pokemon[Math.floor(Math.random() * this.pokemon.length)];
+    let set = types.length > 0 
+      ? this.pokemon.filter(x => {
+        return x.types.filter(t => types.includes(t)).length > 0;
+      })
+      : this.pokemon;
+    return set[Math.floor(Math.random() * set.length)];
+  }
+
+  getPokemonTypes(): string[] {
+    let types: string[] = [];
+    for (const pokemon of this.pokemon) {
+      for (const type of pokemon.types) {
+        if (!types.includes(type))
+          types.push(type);
+      }
+      
+    }
+    return types;
   }
 }

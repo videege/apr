@@ -27,20 +27,57 @@ mat-toolbar {
     border-radius: 4px;
   }
   
-  app-new-task {
-    margin-bottom: 30px;
-  }
-  
-  .empty-label {
-    font-size: 2em;
-    padding-top: 10px;
-    text-align: center;
-    opacity: 0.2;
-  }
-
   .container {
     display: block;
     height: 500px;
     width: 500px;
     padding: 2em;
   }
+
+  .checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+  }
+
+  .content {
+    display: grid;
+    margin: 0 auto;
+    gap: 1rem;    
+  }
+
+  .random-picker {
+    display: grid;
+    margin: 0 auto;
+    gap: 1rem;
+    align-items: center;
+    align-content: center;
+  }
+
+  .pokemon-name {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .pokemon-pic {
+    min-width: 200px;
+  }
+
+  @media (min-width: 600px) {
+    .content {
+      grid-template-columns: repeat(2, 1fr);
+    }    
+  }
+
+  @media (min-width: 800px) {
+    .checkbox-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1000px) {
+    .checkbox-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
