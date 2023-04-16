@@ -24,19 +24,59 @@
         <button mat-raised-button color="primary" (click)="getRandomPokemon()">
           Get Random Pokemon
         </button>
-       
-        <img *ngIf="pkm" [src]="pkm.imageData" class="pokemon-pic" />
+
+        <img *ngIf="pkm" [src]="useShinies.value ? pkm.shinyImageData : pkm.imageData" class="pokemon-pic" />
         <p *ngIf="pkm" class="pokemon-name">{{ pkm.name | titlecase }}</p>
       </div>
       <div>
-        <h2>Type Filters</h2>
-        <form class="checkbox-container">
-          <mat-checkbox
-            *ngFor="let control of typeFilters | keyvalue"
-            [formControl]="control.value">
-            {{ control.key | titlecase }}
-          </mat-checkbox>
-        </form>
+        <mat-tab-group animationDuration="0ms">
+          <mat-tab style="height: 100%;">
+            <ng-template mat-tab-label>
+              <mat-icon style="margin-right: 8px;">category</mat-icon>
+              Types
+            </ng-template>
+            <h2>Type Filters</h2>
+            <button mat-button color="accent" (click)="resetFilters()">
+              Reset
+            </button>
+            <form class="checkbox-container">
+              <mat-checkbox
+                *ngFor="let control of typeFilters | keyvalue"
+                [formControl]="control.value"
+              >
+                {{ control.key | titlecase }}
+              </mat-checkbox>
+            </form>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon style="margin-right: 8px;">description</mat-icon>
+              Species
+            </ng-template>
+            <h2>Species Filters</h2>
+            <form class="species-container">
+              <mat-checkbox [formControl]="useShinies">
+                Shinies Only
+              </mat-checkbox>
+              <mat-checkbox [formControl]="isBaby">Babies Only</mat-checkbox>
+              <mat-checkbox [formControl]="isLegendary">
+                Legendaries Only
+              </mat-checkbox>
+              <mat-checkbox [formControl]="isMythical">
+                Mythicals Only
+              </mat-checkbox>
+              <mat-form-field class="generation">
+                <mat-label>Generation</mat-label>
+                <mat-select [formControl]="generation">
+                  <mat-option>None</mat-option>
+                  <mat-option *ngFor="let gen of generations" [value]="gen">
+                    {{ displayGeneration(gen) }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+          </mat-tab>
+        </mat-tab-group>
       </div>
     </div>
   </div>

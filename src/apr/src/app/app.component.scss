@@ -39,6 +39,16 @@ mat-toolbar {
     grid-template-columns: repeat(1,1fr);
   }
 
+  .species-container {
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 8px;
+  }
+
+  .generation {
+    max-width: 300px;
+  }
+
   .content {
     display: grid;
     margin: 0 auto;

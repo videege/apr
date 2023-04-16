@@ -12,6 +12,8 @@ import { environment } from './config';
 import { AngularFireModule } from '@angular/fire/compat';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatButtonModule,
     MatProgressBarModule,
     ReactiveFormsModule,
+    MatTabsModule,
     MatCheckboxModule,
+    MatSelectModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [],
